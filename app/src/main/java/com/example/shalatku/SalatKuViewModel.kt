@@ -6,10 +6,15 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 
+private const val ROUND_SIZE = 33
+
 class SalatKuViewModel : ViewModel() {
 
-    // --- Tasbih (from CP1) ---
+    // --- Tasbih ---
     var tasbihCount by mutableIntStateOf(0)
+        private set
+
+    var completedRounds by mutableIntStateOf(0)
         private set
 
     // --- Tracker ---
@@ -20,8 +25,18 @@ class SalatKuViewModel : ViewModel() {
     var selectedDay by mutableIntStateOf(0)
         private set
 
-    fun incrementTasbih() { tasbihCount++ }
-    fun resetTasbih() { tasbihCount = 0 }
+    fun incrementTasbih() {
+        tasbihCount++
+        if (tasbihCount == ROUND_SIZE) {
+            completedRounds++
+            tasbihCount = 0
+        }
+    }
+
+    fun resetTasbih() {
+        tasbihCount = 0
+        completedRounds = 0
+    }
 
     fun togglePrayer(name: String) {
         if (name in _donePrayers) _donePrayers.remove(name) else _donePrayers.add(name)
