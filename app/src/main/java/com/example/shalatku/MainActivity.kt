@@ -40,8 +40,6 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun ShalatkuApp(viewModel: SalatKuViewModel = viewModel()) {
     var selected by rememberSaveable { mutableStateOf(0) }
-    var selectedDay by remember { mutableStateOf(0) }
-    val donePrayers = remember { mutableStateListOf<String>() }
 
     Scaffold(
         bottomBar = {
@@ -71,16 +69,14 @@ fun ShalatkuApp(viewModel: SalatKuViewModel = viewModel()) {
         when (selected) {
             0 -> HomeScreen(
                 prayers = samplePrayers,
-                selectedDay = selectedDay,
-                onSelectDay = { selectedDay = it },
+                selectedDay = viewModel.selectedDay,
+                onSelectDay = viewModel::selectDay,
                 modifier = contentModifier
             )
             1 -> TrackerScreen(
                 prayers = samplePrayers,
-                donePrayers = donePrayers,
-                onToggle = { name ->
-                    if (name in donePrayers) donePrayers.remove(name) else donePrayers.add(name)
-                },
+                donePrayers = viewModel.donePrayers,
+                onToggle = viewModel::togglePrayer,
                 modifier = contentModifier
             )
             2 -> TasbihScreen(
