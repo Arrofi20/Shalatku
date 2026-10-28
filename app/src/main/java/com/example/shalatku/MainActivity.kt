@@ -19,9 +19,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.shalatku.ui.theme.ShalatkuTheme
 
 class MainActivity : ComponentActivity() {
@@ -36,10 +37,10 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@Preview
 @Composable
-fun ShalatkuApp() {
-    var selected by remember { mutableStateOf(0) }
+fun ShalatkuApp(viewModel: SalatKuViewModel = viewModel()) {
+    var selected by rememberSaveable { mutableStateOf(0) }
+    var selectedDay by remember { mutableStateOf(0) }
     val donePrayers = remember { mutableStateListOf<String>() }
 
     Scaffold(
@@ -65,10 +66,15 @@ fun ShalatkuApp() {
                 )
             }
         }
-    ) { padding ->
-        val contentModifier = Modifier.padding(padding)
+    ) { innerPadding ->
+        val contentModifier = Modifier.padding(innerPadding)
         when (selected) {
-            0 -> HomeScreen(samplePrayers, contentModifier)
+            0 -> HomeScreen(
+                prayers = samplePrayers,
+                selectedDay = selectedDay,
+                onSelectDay = { selectedDay = it },
+                modifier = contentModifier
+            )
             1 -> TrackerScreen(
                 prayers = samplePrayers,
                 donePrayers = donePrayers,
@@ -77,7 +83,12 @@ fun ShalatkuApp() {
                 },
                 modifier = contentModifier
             )
-            2 -> TasbihScreen(contentModifier)
+            2 -> TasbihScreen(
+                count = viewModel.tasbihCount,
+                onIncrement = viewModel::incrementTasbih,
+                onReset = viewModel::resetTasbih,
+                modifier = contentModifier
+            )
         }
     }
 }
