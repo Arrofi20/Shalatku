@@ -2,11 +2,12 @@ package com.example.shalatku
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -17,11 +18,20 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun HomeScreen(prayers: List<Prayer>, modifier: Modifier = Modifier) {
-    Column(modifier.padding(16.dp)) {
-        Text("Shalatku", style = MaterialTheme.typography.headlineMedium)
-        Text("Today's prayer times", style = MaterialTheme.typography.bodyMedium)
-        Spacer(Modifier.height(16.dp))
-        prayers.forEach { prayer -> PrayerCard(prayer) }
+    LazyColumn(
+        modifier = modifier,
+        contentPadding = PaddingValues(16.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        item {
+            Column {
+                Text("Shalatku", style = MaterialTheme.typography.headlineMedium)
+                Text("Today's prayer times", style = MaterialTheme.typography.bodyMedium)
+            }
+        }
+        items(prayers, key = { it.name }) { prayer ->
+            PrayerCard(prayer)
+        }
     }
 }
 
