@@ -24,6 +24,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.shalatku.ui.theme.ShalatkuTheme
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,6 +40,9 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun ShalatkuApp(viewModel: SalatKuViewModel = viewModel()) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    // UI-only state stays here (M12 rule 4).
     var selected by rememberSaveable { mutableStateOf(0) }
 
     Scaffold(
@@ -68,22 +72,22 @@ fun ShalatkuApp(viewModel: SalatKuViewModel = viewModel()) {
         val contentModifier = Modifier.padding(innerPadding)
         when (selected) {
             0 -> HomeScreen(
-                prayers = samplePrayers,
-                selectedDay = viewModel.selectedDay,
+                prayers = uiState.prayers,
+                selectedDay = uiState.selectedDay,
                 onSelectDay = viewModel::selectDay,
                 modifier = contentModifier
             )
             1 -> TrackerScreen(
-                prayers = samplePrayers,
-                donePrayers = viewModel.donePrayers,
+                prayers = uiState.prayers,
+                donePrayers = uiState.donePrayers,
                 onToggle = viewModel::togglePrayer,
                 onClear = viewModel::clearPrayers,
                 modifier = contentModifier
             )
             2 -> TasbihScreen(
-                count = viewModel.tasbihCount,
-                rounds = viewModel.completedRounds,
-                roundSize = viewModel.roundSize,
+                count = uiState.tasbihCount,
+                rounds = uiState.completedRounds,
+                roundSize = uiState.roundSize,
                 onIncrement = viewModel::incrementTasbih,
                 onReset = viewModel::resetTasbih,
                 onRoundSizeChange = viewModel::setRoundSize,
