@@ -28,6 +28,8 @@ fun HomeScreen(
     prayers: List<Prayer>,
     selectedDay: Int,
     onSelectDay: (Int) -> Unit,
+    prayerTimes: PrayerTimesUiState,
+    onRefreshPrayerTimes: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     LazyColumn(
@@ -42,6 +44,9 @@ fun HomeScreen(
                 Spacer(Modifier.height(8.dp))
                 DateStrip(selectedDay, onSelectDay)
             }
+        }
+        item {
+            PrayerTimesSection(state = prayerTimes, onRefresh = onRefreshPrayerTimes)
         }
         items(prayers, key = { it.name }) { prayer ->
             PrayerCard(prayer)
