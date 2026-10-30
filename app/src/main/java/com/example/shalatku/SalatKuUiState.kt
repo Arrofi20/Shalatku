@@ -7,4 +7,7 @@ data class SalatKuUiState(
     val tasbihCount: Int = 0,
     val completedRounds: Int = 0,
     val roundSize: Int = 33,
-)
+) {
+    val doneCount: Int
+        get() = donePrayers.size
+}

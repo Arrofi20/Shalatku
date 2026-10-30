@@ -80,6 +80,7 @@ fun ShalatkuApp(viewModel: SalatKuViewModel = viewModel()) {
             1 -> TrackerScreen(
                 prayers = uiState.prayers,
                 donePrayers = uiState.donePrayers,
+                doneCount = uiState.doneCount,
                 onToggle = viewModel::togglePrayer,
                 onClear = viewModel::clearPrayers,
                 modifier = contentModifier
